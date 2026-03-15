@@ -918,6 +918,7 @@
         <p style="margin-top: 15px; opacity: 0.7;">© 2026 MAIGI. PostgreSQL-native memory for production AI agents.</p>
     </footer>
 
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
         emailjs.init('TDh9fKjKgH5KvN2sa');
@@ -925,17 +926,30 @@
         document.getElementById('interest-form').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            const serviceID = 'service_9jgvnkg';
-            const templateID = 'template_06o4yig';
+            // Domain restriction - only accept from maigi.dev
+            const allowedDomains = ['maigi.dev', 'www.maigi.dev', 'localhost'];
+            const currentOrigin = window.location.origin;
+            const isAllowedDomain = allowedDomains.some(domain => currentOrigin.includes(domain));
 
-            emailjs.sendForm(serviceID, templateID, this)
-                .then(() => {
-                    document.getElementById('success-message').style.display = 'block';
-                    document.getElementById('interest-form').style.display = 'none';
-                }, (error) => {
-                    alert('Error sending email: ' + error.text);
-                    console.log('Error:', error);
-                });
+            if (!isAllowedDomain) {
+                alert('This form can only be submitted from maigi.dev');
+                return;
+            }
+
+            // Execute reCAPTCHA v3
+            grecaptcha.execute('6LfNaIssAAAAALk0BIFd99dnxXZk6BQnMoJFNa9t', {action: 'submit'}).then((token) => {
+                const serviceID = 'service_9jgvnkg';
+                const templateID = 'template_06o4yig';
+
+                emailjs.sendForm(serviceID, templateID, this)
+                    .then(() => {
+                        document.getElementById('success-message').style.display = 'block';
+                        document.getElementById('interest-form').style.display = 'none';
+                    }, (error) => {
+                        alert('Error sending email: ' + error.text);
+                        console.log('Error:', error);
+                    });
+            });
         });
 
         // FAQ toggle
