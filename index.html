@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAIGI — Memory Infrastructure for AI Agents</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0e27;
+            --dark-blue: #0f1e3d;
+            --accent: #00d9ff;
+            --accent-secondary: #a78bfa;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a5b4;
+            --border-subtle: #1a2d4d;
+            --bg-dark: #0a0e27;
+            --bg-card: #111829;
+            --success: #10b981;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* TOP BANNER */
+        .top-banner {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+            padding: 14px 20px;
+            text-align: center;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+
+        .banner-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .banner-content a {
+            color: white;
+            text-decoration: underline;
+            font-weight: 600;
+            transition: opacity 0.2s ease;
+        }
+
+        .banner-content a:hover {
+            opacity: 0.9;
+        }
+
+        /* HEADER */
+        .header {
+            background: var(--black);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 18px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.3em;
+            font-weight: 800;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: color 0.2s ease;
+        }
+
+        .nav a:hover {
+            color: var(--accent);
+        }
+
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 80px 40px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 217, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse-glow 8s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -40%;
+            left: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse-glow-reverse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes pulse-glow-reverse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(0.95); opacity: 1; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5em, 8vw, 4.5em);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 25px;
+            letter-spacing: -1px;
+        }
+
+        .hero-accent {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25em;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-weight: 400;
+            line-height: 1.6;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* WAITLIST SECTION */
+        .waitlist-section {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08) 0%, rgba(167, 139, 250, 0.08) 100%);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 60px 50px;
+            max-width: 900px;
+            margin: 80px auto;
+            text-align: center;
+        }
+
+        .waitlist-section h2 {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .waitlist-section p {
+            color: var(--text-secondary);
+            font-size: 1.05em;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .waitlist-form {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .waitlist-form input {
+            padding: 14px 20px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1em;
+            width: 300px;
+            max-width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .waitlist-form input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+        }
+
+        .waitlist-form input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        #success-message {
+            margin-top: 20px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 40px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 60px 20px;
+            }
+        }
+
+        /* SECTION */
+        section {
+            margin-bottom: 80px;
+        }
+
+        section h2 {
+            font-size: clamp(2em, 5vw, 3.2em);
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+
+        .section-subtitle {
+            font-size: 1.1em;
+            color: var(--text-secondary);
+            margin-bottom: 50px;
+            max-width: 700px;
+            font-weight: 400;
+        }
+
+        /* THREE PILLARS */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .pillar-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            padding: 40px;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .pillar-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .pillar-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-6px);
+        }
+
+        .pillar-card:hover::before {
+            opacity: 1;
+        }
+
+        .pillar-icon {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .pillar-card h3 {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .pillar-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+
+        /* USE CASES */
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .use-case-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            padding: 40px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .use-case-card:hover {
+            border-color: var(--accent);
+            background: rgba(0, 217, 255, 0.05);
+        }
+
+        .use-case-badge {
+            display: inline-block;
+            background: rgba(0, 217, 255, 0.1);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .use-case-card h3 {
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .use-case-card p {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .metric-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .metric-label {
+            font-size: 0.8em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 1.6em;
+            font-weight: 800;
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* COMPARISON */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 40px;
+        }
+
+        .comparison-box.before {
+            border-color: #dc2626;
+        }
+
+        .comparison-box.after {
+            border-color: var(--success);
+        }
+
+        .comparison-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .comparison-box.before .comparison-title {
+            color: #ff6b6b;
+        }
+
+        .comparison-box.after .comparison-title {
+            color: var(--success);
+        }
+
+        .comparison-list {
+            list-style: none;
+        }
+
+        .comparison-list li {
+            padding: 12px 0 12px 30px;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.95em;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .comparison-list li:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-list li::before {
+            position: absolute;
+            left: 0;
+            font-weight: 700;
+        }
+
+        .comparison-box.before .comparison-list li::before {
+            content: '✗';
+            color: #ff6b6b;
+        }
+
+        .comparison-box.after .comparison-list li::before {
+            content: '✓';
+            color: var(--success);
+        }
+
+        .cost-highlight {
+            background: rgba(0, 217, 255, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .cost-label {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cost-value {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .cost-savings {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(0, 217, 255, 0.1) 100%);
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .savings-title {
+            font-size: 1.5em;
+            font-weight: 800;
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+
+        .savings-detail {
+            color: var(--text-secondary);
+            font-size: 0.95em;
+        }
+
+        /* FAQs */
+        .faq-container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--accent);
+        }
+
+        .faq-question {
+            font-weight: 600;
+            font-size: 1.05em;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-toggle {
+            font-size: 1.5em;
+            color: var(--accent);
+            transition: transform 0.2s ease;
+        }
+
+        .faq-item.open .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 40px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        footer a:hover {
+            opacity: 0.8;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 40px 20px;
+                min-height: 80vh;
+            }
+
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .header {
+                padding: 14px 20px;
+            }
+
+            .nav {
+                gap: 20px;
+            }
+
+            .nav a {
+                display: none;
+            }
+
+            .logo {
+                font-size: 1.1em;
+            }
+
+            .waitlist-section {
+                padding: 40px 25px;
+                margin: 60px 20px;
+            }
+
+            .waitlist-form {
+                flex-direction: column;
+            }
+
+            .waitlist-form input {
+                width: 100%;
+            }
+
+            .pillars-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .use-cases {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOP BANNER -->
+    <div class="top-banner">
+        <div class="banner-content">
+            PostgreSQL-native memory for AI agents. Cuts costs 90% while ensuring consistency and compliance.
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-content">
+            <a href="#" class="logo">MAIGI</a>
+            <nav class="nav">
+                <a href="#how-it-works">Product</a>
+                <a href="#use-cases">How It Works</a>
+                <a href="#comparison">For Enterprise</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Memory as <span class="hero-accent">Infrastructure, Governance & Identity</span> for AI Agents</h1>
+            <p class="hero-subtitle">MAIGI eliminates redundant context reads, reduces AI agent costs by 90%, and guarantees consistency and compliance across concurrent agents.</p>
+        </div>
+    </div>
+
+    <!-- WAITLIST SECTION -->
+    <div class="waitlist-section">
+        <h2>Ready to Cut AI Agent Costs 90%?</h2>
+        <p>Join enterprise teams using MAIGI to reduce token spend from $500K/year to $50K/year while guaranteeing agent consistency and compliance.</p>
+        <form id="interest-form" style="display: flex; flex-direction: column; align-items: center; max-width: 500px; margin: 0 auto;">
+            <input type="email" name="from_email" placeholder="your@company.com" required style="width: 100%; padding: 14px 20px; border: 1px solid var(--border-subtle); border-radius: 6px; background: var(--bg-card); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1em; margin-bottom: 15px;">
+            <textarea name="message" placeholder="Any specific questions or use cases? (optional)" style="width: 100%; padding: 12px 15px; border: 1px solid var(--border-subtle); border-radius: 6px; background: var(--bg-card); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 0.95em; resize: vertical; min-height: 100px; margin-bottom: 15px;"></textarea>
+            <button type="submit" class="btn btn-success" style="width: 100%;">I'm Interested</button>
+        </form>
+        <div id="success-message" style="display: none; text-align: center;">
+            ✓ Thank you! We'll review your request and be in touch within 24 hours.
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+        <!-- HOW IT WORKS -->
+        <section id="how-it-works">
+            <h2>How MAIGI Works</h2>
+            <p class="section-subtitle">Three core capabilities that solve the AI agent cost crisis</p>
+
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <div class="pillar-icon">💾</div>
+                    <h3>Persistent Memory</h3>
+                    <p>Instead of reloading context every turn, MAIGI stores agent conversations in a PostgreSQL-backed memory layer. When agents request context, they get only the NEW data—everything else is deduplicated via content hashing and version control.</p>
+                </div>
+
+                <div class="pillar-card">
+                    <div class="pillar-icon">🔒</div>
+                    <h3>Multi-Agent Safety</h3>
+                    <p>When 10 agents read the same CRM record simultaneously, MAIGI guarantees ACID consistency. No race conditions. No conflicts. Built-in orchestration sagas handle distributed transactions across concurrent agents without data corruption.</p>
+                </div>
+
+                <div class="pillar-card">
+                    <div class="pillar-icon">📊</div>
+                    <h3>Complete Visibility</h3>
+                    <p>Every agent interaction is logged. Who accessed what data, when, and why. Full audit trail for compliance. Temporal queries let you ask "what was the state at 2pm yesterday?" Perfect for debugging and regulatory requirements.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- USE CASES -->
+        <section id="use-cases">
+            <h2>Where MAIGI Makes the Biggest Impact</h2>
+            <p class="section-subtitle">Real-world scenarios where multi-agent memory saves Fortune 500 companies thousands per month</p>
+
+            <div class="use-cases">
+                <div class="use-case-card">
+                    <span class="use-case-badge">🎯 Primary Market</span>
+                    <h3>Enterprise Sales Teams</h3>
+                    <p><strong>The Problem:</strong> 10 sales agents simultaneously reading Salesforce CRM to qualify deals. Each turn reloads the full customer context (5000+ tokens). Multiply by 5 turns per conversation × 100+ daily conversations = massive token waste and stale data.</p>
+                    <p style="margin-top: 15px;"><strong>With MAIGI:</strong> First read loads full context. Subsequent reads get only new data. Agent 2 reading same customer pays zero token cost for already-loaded context.</p>
+                    <div class="metric-row">
+                        <div class="metric-item">
+                            <div class="metric-label">Cost Today</div>
+                            <div class="metric-value">$12K/mo</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">With MAIGI</div>
+                            <div class="metric-value">$1.2K/mo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="use-case-card">
+                    <span class="use-case-badge">🚀 Quick Win</span>
+                    <h3>Customer Support Teams</h3>
+                    <p><strong>The Problem:</strong> Support agents handling 10-50 message support conversations. Each message causes the agent to reload full ticket history + KB + customer profile. By message 20, context window is consumed, agent starts forgetting earlier messages.</p>
+                    <p style="margin-top: 15px;"><strong>With MAIGI:</strong> Agent sees full conversation history without token bloat. MAIGI deduplicates context across all 50 messages. Result: 95% first-contact resolution, 90% cost reduction.</p>
+                    <div class="metric-row">
+                        <div class="metric-item">
+                            <div class="metric-label">Cost Today</div>
+                            <div class="metric-value">$1.20/ticket</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">With MAIGI</div>
+                            <div class="metric-value">$0.15/ticket</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPARISON -->
+        <section id="comparison">
+            <h2>The Impact</h2>
+            <p class="section-subtitle">Without MAIGI vs With MAIGI</p>
+
+            <div class="comparison-grid">
+                <div class="comparison-box before">
+                    <h3 class="comparison-title">❌ Status Quo</h3>
+                    <ul class="comparison-list">
+                        <li>Full context loaded every turn</li>
+                        <li>Redundant reads across agents</li>
+                        <li>Token counts explode with turns</li>
+                        <li>Race conditions on updates</li>
+                        <li>No consistency guarantees</li>
+                        <li>$500K+ annual token costs</li>
+                    </ul>
+                    <div class="cost-highlight">
+                        <div class="cost-label">Cost per conversation:</div>
+                        <div class="cost-value">$0.50</div>
+                    </div>
+                </div>
+
+                <div class="comparison-box after">
+                    <h3 class="comparison-title">✓ With MAIGI</h3>
+                    <ul class="comparison-list">
+                        <li>MVCC deduplication</li>
+                        <li>Session-aware versioning</li>
+                        <li>Only new data fetched</li>
+                        <li>Orchestration sagas</li>
+                        <li>ACID consistency</li>
+                        <li>$50K annual token costs</li>
+                    </ul>
+                    <div class="cost-highlight">
+                        <div class="cost-label">Cost per conversation:</div>
+                        <div class="cost-value">$0.055</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cost-savings">
+                <div class="savings-title">90% Cost Reduction</div>
+                <div class="savings-detail">For one Fortune 500 company: <strong>$144,000/year savings</strong></div>
+            </div>
+        </section>
+
+        <!-- FAQs -->
+        <section>
+            <h2>Frequently Asked Questions</h2>
+            <p class="section-subtitle">Everything enterprise teams need to know</p>
+
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How is MAIGI different from vector databases?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Vector databases are designed for semantic search over embeddings. MAIGI is designed for agent-aware memory management with ACID guarantees. We focus on deduplication, multi-agent consistency, and cost reduction—not semantic search.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Does MAIGI work with my LLM provider?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes. MAIGI works with any LLM provider (OpenAI, Anthropic, open-source models, etc.). We're a memory layer, not an LLM integration. Your LLM makes requests to MAIGI for context, and we return deduplicated data.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What about data privacy and compliance?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        MAIGI provides complete audit trails, session tracking, and compliance-ready logging. You can self-host on your infrastructure or use our managed service. Full SOC 2 compliance roadmap.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How quickly can we implement MAIGI?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Most integrations take 2-4 weeks. We provide Python SDKs, REST APIs, and detailed documentation. Your team integrates MAIGI into your agent framework—no major architectural changes needed.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do you offer support and SLAs?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes. Enterprise customers get dedicated support, custom SLAs, and priority feature requests. Starter tier includes community support and documentation.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>MAIGI — Memory Infrastructure for AI Agents | <a href="#">Docs</a> | <a href="#">Contact</a> | <a href="#">Privacy</a></p>
+        <p style="margin-top: 15px; opacity: 0.7;">© 2026 MAIGI. PostgreSQL-native memory for production AI agents.</p>
+    </footer>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        emailjs.init('TDh9fKjKgH5KvN2sa');
+
+        document.getElementById('interest-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const serviceID = 'service_9jgvnkg';
+            const templateID = 'template_06o4yig';
+
+            emailjs.sendForm(serviceID, templateID, this)
+                .then(() => {
+                    document.getElementById('success-message').style.display = 'block';
+                    document.getElementById('interest-form').style.display = 'none';
+                }, (error) => {
+                    alert('Error sending email: ' + error.text);
+                    console.log('Error:', error);
+                });
+        });
+
+        // FAQ toggle
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.querySelector('.faq-question').addEventListener('click', () => {
+                item.classList.toggle('open');
+            });
+        });
+    </script>
+</body>
+</html>
