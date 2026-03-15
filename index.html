@@ -825,6 +825,17 @@
                     MAIGI (launching Q2 2026) is production-ready for 10-100 concurrent agents. Enterprise features (monitoring, scaling, SLA support) ship in Phase 2. Built on PostgreSQL—the same database powering Fortune 500 companies.
                 </div>
             </div>
+
+            <!-- FAQ 7 -->
+            <div style="background: linear-gradient(135deg, rgba(21, 27, 47, 0.6), rgba(30, 41, 59, 0.3)); border: 1px solid var(--border-subtle); padding: 25px; border-radius: 12px; cursor: pointer;" onclick="this.querySelector('.faq-answer').style.display = this.querySelector('.faq-answer').style.display === 'none' ? 'block' : 'none'">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="font-size: 1.1em; color: var(--accent-cyan); margin: 0;">Is MAIGI an orchestrator?</h3>
+                    <span style="font-size: 1.5em;">+</span>
+                </div>
+                <div class="faq-answer" style="display: none; margin-top: 15px; color: var(--text-secondary); line-height: 1.7;">
+                    No. MAIGI is a memory infrastructure layer, not an orchestrator. We handle persistent context storage, deduplication, and multi-agent consistency. We don't manage agent lifecycle or workflows. MAIGI complements your existing orchestrator (Kubernetes, cloud workflows, etc.) by providing intelligent memory coordination.
+                </div>
+            </div>
         </div>
     </section>
 
