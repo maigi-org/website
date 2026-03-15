@@ -851,7 +851,6 @@
     </footer>
 
     <!-- SCRIPTS -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script type="text/javascript">
         emailjs.init('TDh9fKjKgH5KvN2sa');
@@ -870,20 +869,17 @@
                 return;
             }
 
-            // reCAPTCHA
-            grecaptcha.execute('6LfNrYssAAAAAKVSfNCONIYvTMuuGNxTwu99J0Hj', {action: 'submit'}).then((token) => {
-                const serviceID = 'service_9jgvnkg';
-                const templateID = 'template_06o4yig';
+            const serviceID = 'service_9jgvnkg';
+            const templateID = 'template_06o4yig';
 
-                emailjs.sendForm(serviceID, templateID, formElement)
-                    .then(() => {
-                        document.getElementById('success-message').style.display = 'block';
-                        document.getElementById('interest-form').style.display = 'none';
-                    }, (error) => {
-                        alert('Error sending email: ' + error.text);
-                        console.log('Error:', error);
-                    });
-            });
+            emailjs.sendForm(serviceID, templateID, formElement)
+                .then(() => {
+                    document.getElementById('success-message').style.display = 'block';
+                    document.getElementById('interest-form').style.display = 'none';
+                }, (error) => {
+                    alert('Error sending email: ' + error.text);
+                    console.log('Error:', error);
+                });
         });
 
         // Smooth scroll for nav links
